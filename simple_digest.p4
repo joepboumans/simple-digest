@@ -33,8 +33,8 @@
 
 
 struct digest_t {
-  mac_addr_t src_addr;
-  mac_addr_t dst_addr;
+  bit<32> src_addr;
+  bit<32> dst_addr;
   PortId_t port;
 }
 
@@ -98,7 +98,7 @@ control SwitchIngressDeparser( packet_out pkt, inout header_t hdr, in metadata_t
 
   apply {
     if (ig_intr_dprsr_md.digest_type == 1) {
-      digest.pack({hdr.ethernet.src_addr, hdr.ethernet.dst_addr, ig_md.port});
+      digest.pack({hdr.ipv4.src_addr, hdr.ipv4.dst_addr, ig_md.port});
     }
     pkt.emit(hdr);
   }
@@ -112,6 +112,7 @@ control SwitchIngress(inout header_t hdr, inout metadata_t ig_md,
 
   action hit(PortId_t port) {
     ig_intr_tm_md.ucast_egress_port = port;
+    ig_md.port = ig_intr_md.ingress_port;
     ig_intr_dprsr_md.digest_type = 1;
     ig_intr_dprsr_md.drop_ctl = 0x0;
   }
@@ -133,7 +134,6 @@ control SwitchIngress(inout header_t hdr, inout metadata_t ig_md,
   }
 
   apply { 
-    ig_md.port = ig_intr_md.ingress_port;
     forward.apply();
     ig_intr_tm_md.bypass_egress = 1w1;
   }

@@ -48,14 +48,12 @@ class SimpleDigest(BfRuntimeTest):
 
         ''' TC:1 Setting up forward'''
         logger.info("Populating forward table...")
-        num_entries = 100
+        num_entries = 1000
         seed = 1001
         ip_list = self.generate_random_ip_list(num_entries, seed)
 
         for ip_entry in ip_list:
-            logger.info(ip_entry)
             dst_addr = getattr(ip_entry, "ip")
-            logger.info(dst_addr)
             logger.debug(f"\tforward - inserting table entry with port {ig_port} and dst_addr {dst_addr}")
             key = forward.make_key([gc.KeyTuple('dst_addr', dst_addr)])
             data = forward.make_data([gc.DataTuple('port', ig_port)], "SwitchIngress.hit")

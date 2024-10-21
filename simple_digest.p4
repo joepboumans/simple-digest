@@ -130,7 +130,7 @@ control SwitchIngress(inout header_t hdr, inout metadata_t ig_md,
       miss;
     }
     default_action = miss;
-    size = 256;
+    size = 1024;
   }
 
   apply { 

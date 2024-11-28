@@ -31,7 +31,7 @@ class SimpleDigest(BfRuntimeTest):
 
         self.bfrt_info = self.interface.bfrt_info_get(name)
         self.forward = self.bfrt_info.table_get("forward")
-        self.forward.info.key_field_annotation_add("dst_addr", "ipv4")
+        # self.forward.info.key_field_annotation_add("dst_addr", "ipv4")
         self.learn_filter = self.bfrt_info.learn_get("digest")
         self.learn_filter.info.data_field_annotation_add("src_addr", "ipv4")
         self.learn_filter.info.data_field_annotation_add("dst_addr", "ipv4")
@@ -52,13 +52,18 @@ class SimpleDigest(BfRuntimeTest):
         seed = 1001
         ip_list = self.generate_random_ip_list(num_entries, seed)
 
-        for ip_entry in ip_list:
-            dst_addr = getattr(ip_entry, "ip")
-            logger.debug(f"\tforward - inserting table entry with port {ig_port} and dst_addr {dst_addr}")
-            key = forward.make_key([gc.KeyTuple('dst_addr', dst_addr)])
-            data = forward.make_data([gc.DataTuple('port', ig_port)], "SwitchIngress.hit")
+        logger.debug(f"\tforward - inserting table entry with port {ig_port} and dst_port {eg_port}")
+        key = forward.make_key([gc.keytuple('ingress_port', ig_port)])
+        data = forward.make_data([gc.datatuple('dst_port', eg_port)], "switchingress.hit")
+        forward.entry_add(target, [key], [data])
 
-            forward.entry_add(target, [key], [data])
+        # for ip_entry in ip_list:
+        #     dst_addr = getattr(ip_entry, "ip")
+        #     logger.debug(f"\tforward - inserting table entry with port {ig_port} and dst_addr {dst_addr}")
+        #     key = forward.make_key([gc.keytuple('dst_addr', dst_addr)])
+        #     data = forward.make_data([gc.datatuple('port', ig_port)], "switchingress.hit")
+
+            # forward.entry_add(target, [key], [data])
 
 
         logger.info("Adding entries to forward table")

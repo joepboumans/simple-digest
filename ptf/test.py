@@ -53,8 +53,8 @@ class SimpleDigest(BfRuntimeTest):
         ip_list = self.generate_random_ip_list(num_entries, seed)
 
         logger.debug(f"\tforward - inserting table entry with port {ig_port} and dst_port {eg_port}")
-        key = forward.make_key([gc.keytuple('ingress_port', ig_port)])
-        data = forward.make_data([gc.datatuple('dst_port', eg_port)], "switchingress.hit")
+        key = forward.make_key([gc.KeyTuple('ingress_port', ig_port)])
+        data = forward.make_data([gc.DataTuple('dst_port', eg_port)], "switchingress.hit")
         forward.entry_add(target, [key], [data])
 
         # for ip_entry in ip_list:

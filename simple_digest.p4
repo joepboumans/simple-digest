@@ -110,8 +110,8 @@ control SwitchIngress(inout header_t hdr, inout metadata_t ig_md,
               inout ingress_intrinsic_metadata_for_deparser_t ig_intr_dprsr_md,
               inout ingress_intrinsic_metadata_for_tm_t ig_intr_tm_md) {
 
-  action hit(PortId_t port) {
-    ig_intr_tm_md.ucast_egress_port = port;
+  action hit(PortId_t dst_port) {
+    ig_intr_tm_md.ucast_egress_port = dst_port;
     ig_md.port = ig_intr_md.ingress_port;
     ig_intr_dprsr_md.digest_type = 1;
     ig_intr_dprsr_md.drop_ctl = 0x0;

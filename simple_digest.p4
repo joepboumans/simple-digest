@@ -123,7 +123,8 @@ control SwitchIngress(inout header_t hdr, inout metadata_t ig_md,
 
   table forward {
     key = {
-      hdr.ipv4.dst_addr : exact@name("dst_addr");
+      /*hdr.ipv4.dst_addr : exact@name("dst_addr");*/
+      ig_intr_md.ingress_port: exact;
     }
     actions = {
       hit;

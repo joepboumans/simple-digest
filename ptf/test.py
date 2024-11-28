@@ -40,8 +40,10 @@ class SimpleDigest(BfRuntimeTest):
 
     def runTest(self):
         logger.info("Start testing")
-        ig_port = swports[0]
-        eg_port = swports[random.randint(0, len(swports) - 1)]
+        # ig_port = swports[0]
+        # eg_port = swports[random.randint(0, len(swports) - 1)]
+        ig_port = 132
+        eg_port = 148
         target = self.target
         forward = self.forward
         learn_filter = self.learn_filter

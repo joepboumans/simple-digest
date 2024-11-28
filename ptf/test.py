@@ -54,7 +54,7 @@ class SimpleDigest(BfRuntimeTest):
 
         logger.debug(f"\tforward - inserting table entry with port {ig_port} and dst_port {eg_port}")
         key = forward.make_key([gc.KeyTuple('ig_intr_md.ingress_port', ig_port)])
-        data = forward.make_data([gc.DataTuple('dst_port', eg_port)], "switchingress.hit")
+        data = forward.make_data([gc.DataTuple('dst_port', eg_port)], "SwitchIngress.hit")
         forward.entry_add(target, [key], [data])
 
         # for ip_entry in ip_list:

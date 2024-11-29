@@ -66,7 +66,7 @@ class BfRt_interface():
             print(f"{src_addr} {dst_addr}")
                 # print(flow_id, flush=True)
         except:
-            print("error reading digest", flush=True)
+            print("error reading digest", end="", flush=True)
 
 
     def run(self):

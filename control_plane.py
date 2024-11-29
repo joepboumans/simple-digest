@@ -1,5 +1,8 @@
 #! /usr/bin/env python3
-import os
+import os, sys  
+
+sys.path.append('../../../sde/bf-sde-9.11.0/install/lib/python3.8/site-packages/tofino/')
+sys.path.append('../../../sde/bf-sde-9.11.0/install/lib/python3.8/site-packages/tofino/bfrt_grpc/')
 
 os.environ["GRPC_ENABLE_FORK_SUPPORT"] = "1"
 os.environ["GRPC_POLL_STRATEGY"] = "poll"

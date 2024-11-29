@@ -25,6 +25,10 @@ class BfRt_interface():
 
         self.interface.bind_pipeline_config(self.p4_name)
 
+        self.learn_filter = self.bfrt_info.learn_get("digest")
+        self.learn_filter.info.data_field_annotation_add("src_addr", "ipv4")
+        self.learn_filter.info.data_field_annotation_add("dst_addr", "ipv4")
+
         print("Connected to Device: {}, Program: {}, ClientId: {}".format(
                 dev, self.p4_name, client_id))
 
@@ -52,9 +56,30 @@ class BfRt_interface():
                     ))
             print("================")
 
+    def _read_digest(self):
+        try:
+            digest = self.interface.digest_get(1)
+            data_list = self.learn_filter.make_data_list(digest)
+            data_dict = data_list[0].to_dict()
+            src_addr = data_dict["src_addr"]
+            dst_addr = data_dict["dst_addr"]
+            print(f"{src_addr} {dst_addr}")
+                # print(flow_id, flush=True)
+        except:
+            print("error reading digest", flush=True)
+
+
+    def run(self):
+        self._read_digest()
+
+
 def main():
     bfrt_interface = BfRt_interface(0, 'localhost:50052', 0)
     bfrt_interface.list_tables()
+
+
+    while True:
+        bfrt_interface.run()
 
 if __name__ == "__main__":
     main()

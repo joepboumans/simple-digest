@@ -26,6 +26,7 @@
 #endif
 
 #include "common/headers.p4"
+#include "common/constants.p4"
 #include "common/util.p4"
 
 #define WATERFALL_WIDTH 16

@@ -28,7 +28,8 @@ SimpleDigest::SimpleDigest() : ControlPlane("simple_digest") {
     bf_pal_front_port_handle_t port_handle;
     bf_status_t bf_status =
         bf_pm_port_dev_port_to_front_panel_port_get(0, port, &port_handle);
-    bf_status = bf_pm_port_add(0, &port_handle, BF_SPEED_10G, BF_FEC_TYP_NONE);
+    bf_status =
+        bf_pm_port_add(0, &port_handle, BF_SPEED_100G, BF_FEC_TYP_REED_SOLOMON);
     bf_pm_port_enable(0, &port_handle);
 
     if (bf_status != BF_SUCCESS) {

@@ -53,6 +53,7 @@ void SimpleDigest::run() {
         hasReceivedFirstDigest = true;
       }
 
+      std::cout << "Recieved data from digest" << std::endl;
       ControlPlane::mLearnInterface.hasNewData = false;
       lastReceivedTime = std::chrono::high_resolution_clock::now();
     }
@@ -60,7 +61,7 @@ void SimpleDigest::run() {
     auto time = std::chrono::high_resolution_clock::now();
     if (std::chrono::duration_cast<std::chrono::milliseconds>(time -
                                                               lastReceivedTime)
-                .count() >= 1000 and
+                .count() >= 10000 and
         hasReceivedFirstDigest) {
       std::cout << "Have no received any digest for over 1s, quiting run loop"
                 << std::endl;

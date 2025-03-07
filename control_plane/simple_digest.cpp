@@ -20,6 +20,8 @@ SimpleDigest::SimpleDigest() : ControlPlane("simple_digest") {
                          {{"dst_port", 0}}, "SwitchIngress.hit");
   ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 132}},
                          {{"dst_port", 148}}, "SwitchIngress.hit");
+  ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 148}},
+                         {{"dst_port", 132}}, "SwitchIngress.hit");
 
   std::array<uint32_t, 4> ports = {0, 1, 132, 148};
   for (auto &port : ports) {

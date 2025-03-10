@@ -92,7 +92,7 @@ void SimpleDigest::run() {
       break;
     }
 
-    usleep(10);
+    usleep(100);
   }
   std::cout << "Finished the test exit via ctrl-z or keep using the switch cli"
             << std::endl;

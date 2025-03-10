@@ -16,14 +16,14 @@ extern "C" {
 
 SimpleDigest::SimpleDigest() : ControlPlane("simple_digest") {
   const auto forwardTable = ControlPlane::getTable("SwitchIngress.forward");
-  ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 0}},
-                         {{"dst_port", 0}}, "SwitchIngress.hit");
+  /*ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 0}},*/
+  /*                       {{"dst_port", 0}}, "SwitchIngress.hit");*/
   ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 132}},
                          {{"dst_port", 148}}, "SwitchIngress.hit");
   ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 148}},
                          {{"dst_port", 132}}, "SwitchIngress.hit");
 
-  std::array<uint32_t, 4> ports = {0, 1, 132, 148};
+  std::array<uint32_t, 4> ports = {132, 148};
   for (auto &port : ports) {
     bf_pal_front_port_handle_t port_handle;
     bf_status_t bf_status =

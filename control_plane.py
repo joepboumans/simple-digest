@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 import os, sys, time 
+from time import perf_counter
 
 sys.path.append('/home/onie/sde/bf-sde-9.11.0/install/lib/python3.8/site-packages/tofino/')
 sys.path.append('/home/onie/sde/bf-sde-9.11.0/install/lib/python3.8/site-packages/tofino/bfrt_grpc/')
@@ -27,9 +28,10 @@ class BfRt_interface():
         self.learn_filter = self.bfrt_info.learn_get("digest")
         self.learn_filter.info.data_field_annotation_add("src_addr", "ipv4")
 
+        self.digestList = []
+        self.tuples_list = []
         self.total_received = 0
         self.recievedDigest = 0
-        self.digestList = []
         self.missedDigest = 0
         self.hasFirstData = False
 
@@ -73,6 +75,9 @@ class BfRt_interface():
                 if self.recievedDigest % 1000 == 0:
                     print(f"Received {self.recievedDigest} digests")
 
+                self.timeLastData = perf_counter()
+                if not self.hasFirstData:
+                    self.timeFirstData = perf_counter()
                 self.hasFirstData = True
             except Exception as err:
                 self.missedDigest += 1
@@ -85,14 +90,24 @@ class BfRt_interface():
     def run(self):
         self._read_digest()
 
+        for data_list in self.digestList:
+            for data in data_list:
+                tuple_list = bytes(data["src_addr"].val)
+                print(tuple_list.hex())
+                self.tuples_list.append(tuple_list)
+        print(f"Received {self.recievedDigest} digest from switch")
+        print(f"Received {len(self.tuples_list)} total tuples from switch")
+        self.tuples = {*self.tuples_list}
+        print(f"Received {len(self.tuples)} unique tuples from switch")
+        print(f"Total time for recieving tuples was {self.timeLastData - self.timeFirstData} s")
+
 
 def main():
     bfrt_interface = BfRt_interface(0, 'localhost:50052', 0)
     bfrt_interface.list_tables()
 
 
-    while True:
-        bfrt_interface.run()
+    bfrt_interface.run()
 
 if __name__ == "__main__":
     main()

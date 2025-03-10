@@ -34,6 +34,7 @@ class BfRt_interface():
         self.recievedDigest = 0
         self.missedDigest = 0
         self.hasFirstData = False
+        self.lastRun = 0
 
         print("Connected to Device: {}, Program: {}, ClientId: {}".format(
                 dev, self.p4_name, client_id))
@@ -66,7 +67,7 @@ class BfRt_interface():
         self.isRunning = True
         while self.isRunning:
             try:
-                digest = self.interface.digest_get(0.1)
+                digest = self.interface.digest_get(0.01)
                 data_list = self.learn_filter.make_data_list(digest)
                 self.total_received += len(data_list)
                 self.digestList.append(data_list)
@@ -80,12 +81,13 @@ class BfRt_interface():
                     self.timeFirstData = perf_counter()
                 self.hasFirstData = True
             except Exception as err:
-                self.missedDigest += 1
-                print(f"error reading digest {self.missedDigest}, {err} ", end="", flush=True)
-                if self.hasFirstData and self.missedDigest >= 3:
-                    self.isRunning = False
-                    print("")
-                time.sleep(0.05)
+                if(perf_counter() - self.lastRun >= 0.5):
+                    self.missedDigest += 1
+                    print(f"error reading digest {self.missedDigest}, {err} ", end="", flush=True)
+                    if self.hasFirstData and self.missedDigest >= 3:
+                        self.isRunning = False
+                        print("")
+                    self.lastRun = perf_counter()
 
     def run(self):
         self._read_digest()

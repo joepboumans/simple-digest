@@ -59,7 +59,9 @@ void SimpleDigest::run() {
         hasReceivedFirstDigest = true;
       }
 
-      std::cout << "Recieved data from digest" << std::endl;
+      std::cout << "Recieved data from digest "
+                << ControlPlane::mLearnInterface.mLearnDataVec.size()
+                << " total packets\r";
       ControlPlane::mLearnInterface.hasNewData = false;
       lastReceivedTime = std::chrono::high_resolution_clock::now();
     }
@@ -77,11 +79,15 @@ void SimpleDigest::run() {
       std::cout << "Took a total of " << totalTime.count()
                 << " ms to receive all digests" << std::endl;
 
-      std::cout << "Recieved data from digest" << std::endl;
-      for (const auto &x : ControlPlane::mLearnInterface.mLearnDataVec) {
-        std::cout << x << " ";
-      }
-      std::cout << std::endl;
+      std::cout << "Recieved data from digest "
+                << ControlPlane::mLearnInterface.mLearnDataVec.size()
+                << " total packets" << std::endl;
+
+      /*std::cout << "Recieved data from digest" << std::endl;*/
+      /*for (const auto &x : ControlPlane::mLearnInterface.mLearnDataVec) {*/
+      /*  std::cout << x << " ";*/
+      /*}*/
+      /*std::cout << std::endl;*/
 
       break;
     }

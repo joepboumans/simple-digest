@@ -35,8 +35,6 @@
 
 struct digest_t {
   bit<32> src_addr;
-  bit<32> dst_addr;
-  PortId_t port;
 }
 
 struct metadata_t {
@@ -99,7 +97,7 @@ control SwitchIngressDeparser( packet_out pkt, inout header_t hdr, in metadata_t
 
   apply {
     if (ig_intr_dprsr_md.digest_type == 1) {
-      digest.pack({hdr.ipv4.src_addr, hdr.ipv4.dst_addr, ig_md.port});
+      digest.pack({hdr.ipv4.src_addr});
     }
     pkt.emit(hdr);
   }

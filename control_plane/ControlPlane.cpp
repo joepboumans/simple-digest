@@ -19,10 +19,10 @@ handleLearnCallback(const bf_rt_target_t &bf_rt_tgt,
   for (auto &data : learnDataVec) {
     data->getValue(1, &val);
     cpLearnInterface->mLearnDataVec.push_back(val);
-    data->getValue(2, &val);
-    cpLearnInterface->mLearnDataVec.push_back(val);
-    data->getValue(3, &val);
-    cpLearnInterface->mLearnDataVec.push_back(val);
+    /*data->getValue(2, &val);*/
+    /*cpLearnInterface->mLearnDataVec.push_back(val);*/
+    /*data->getValue(3, &val);*/
+    /*cpLearnInterface->mLearnDataVec.push_back(val);*/
     /*std::cout << "Data val " << val << std::endl;*/
     /*std::cout << "Msg hdl " << learn_msg_hdl << std::endl;*/
   }
@@ -138,7 +138,8 @@ shared_ptr<const BfRtLearn> ControlPlane::getLearnFilter(string name) {
     std::cout << name << " : " << id << " ";
   }
   std::cout << std::endl;
-  mLearnInterface.mLearnDataVec.reserve(10000);
+  // Average data set has 35 milion packets so 50M should always fit
+  mLearnInterface.mLearnDataVec.reserve(40000000);
 
   bfrt::bfRtCbFunction cbFunc = handleLearnCallback;
   mLearnInterface.mLearn = std::shared_ptr<const bfrt::BfRtLearn>(learnPtr);

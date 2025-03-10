@@ -1,4 +1,5 @@
 #include "ControlPlane.hpp"
+#include "bf_types/bf_types.h"
 #include <filesystem>
 #include <iostream>
 
@@ -39,37 +40,38 @@ handleLearnCallback(const bf_rt_target_t &bf_rt_tgt,
 
 ControlPlane::ControlPlane(string programName) {
   /* Allocate memory for the libbf_switchd context. */
-  mSwitchContext =
-      (bf_switchd_context_t *)calloc(1, sizeof(bf_switchd_context_t));
-  if (!mSwitchContext) {
-    throw runtime_error("Cannot allocate switchd context");
-  }
+  /*mSwitchContext =*/
+  /*    (bf_switchd_context_t *)calloc(1, sizeof(bf_switchd_context_t));*/
+  /*if (!mSwitchContext) {*/
+  /*  throw runtime_error("Cannot allocate switchd context");*/
+  /*}*/
 
   /* Always set "background" because we do not want bf_switchd_lib_init to start
    * a CLI session.  That can be done afterward by the caller if requested
    * through command line options. */
-  mSwitchContext->running_in_background = true;
+  /*mSwitchContext->running_in_background = true;*/
 
   /* Always set "skip port add" so that ports are not automatically created when
    * running on either model or HW. */
-  mSwitchContext->skip_port_add = true;
-  mSwitchContext->install_dir = getenv("SDE_INSTALL");
+  /*mSwitchContext->skip_port_add = true;*/
+  /*mSwitchContext->install_dir = getenv("SDE_INSTALL");*/
 
   // Set separately to keek pointer intact
-  string confPath = filesystem::current_path().string() + string("/build/p4/") +
-                    programName + string("/tofino/") + programName +
-                    string(".conf");
-  mSwitchContext->conf_file = confPath.data();
-  mSwitchContext->dev_sts_thread = true;
-  mSwitchContext->dev_sts_port = 7777;
+  /*string confPath = filesystem::current_path().string() + string("/build/p4/")
+   * +*/
+  /*                  programName + string("/tofino/") + programName +*/
+  /*                  string(".conf");*/
+  /*mSwitchContext->conf_file = confPath.data();*/
+  /*mSwitchContext->dev_sts_thread = true;*/
+  /*mSwitchContext->dev_sts_port = 7777;*/
 
   /* Initialize libbf_switchd. */
-  bf_status_t bf_status = bf_switchd_lib_init(mSwitchContext);
-  if (bf_status != BF_SUCCESS) {
-    free(mSwitchContext);
-    printf("Error: %s\n", bf_err_str(bf_status));
-    throw runtime_error("Failed to initialize libbf_switchd");
-  }
+  /*bf_status_t bf_status = bf_switchd_lib_init(mSwitchContext);*/
+  /*if (bf_status != BF_SUCCESS) {*/
+  /*  free(mSwitchContext);*/
+  /*  printf("Error: %s\n", bf_err_str(bf_status));*/
+  /*  throw runtime_error("Failed to initialize libbf_switchd");*/
+  /*}*/
 
   mDeviceTarget.dev_id = 0;
   mDeviceTarget.pipe_id = 0xFFFF; // 0xFFFF = All pipes
@@ -82,7 +84,8 @@ ControlPlane::ControlPlane(string programName) {
   // interacting with the table
   // Get bfrtInfo object from dev_id and p4 program name
   const BfRtInfo *infoPtr = nullptr;
-  bf_status = devMgr.bfRtInfoGet(mDeviceTarget.dev_id, programName, &infoPtr);
+  bf_status_t bf_status =
+      devMgr.bfRtInfoGet(mDeviceTarget.dev_id, programName, &infoPtr);
   mInfo = shared_ptr<const BfRtInfo>(infoPtr);
   // Check for status
   if (bf_status != BF_SUCCESS) {

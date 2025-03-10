@@ -15,6 +15,7 @@ extern "C" {
 }
 
 SimpleDigest::SimpleDigest() : ControlPlane("simple_digest") {
+  return;
   const auto forwardTable = ControlPlane::getTable("SwitchIngress.forward");
   /*ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 0}},*/
   /*                       {{"dst_port", 0}}, "SwitchIngress.hit");*/

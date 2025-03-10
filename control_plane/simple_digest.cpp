@@ -95,10 +95,10 @@ void SimpleDigest::run() {
     /*usleep(100);*/
   }
   std::set<uint64_t> uniqueSrcAddress;
-  for   (const auto &x : ControlPlane::mLearnInterface.mLearnDataVec) {
+  for    (const auto &x : ControlPlane::mLearnInterface.mLearnDataVec) {
     uniqueSrcAddress.insert(x);
   }
-  std::cout << "Found " << uniqueSrcAddress.size() << " unique tupels" << std::endl
+  std::cout << "Found " << uniqueSrcAddress.size() << " unique tupels" << std::endl;
   std::cout << "Finished the test exit via ctrl-z or keep using the switch cli"
             << std::endl;
   while (true) {

@@ -93,7 +93,7 @@ class BfRt_interface():
         for data_list in self.digestList:
             for data in data_list:
                 tuple_list = bytes(data["src_addr"].val)
-                print(tuple_list.hex())
+                # print(tuple_list.hex())
                 self.tuples_list.append(tuple_list)
         print(f"Received {self.recievedDigest} digest from switch")
         print(f"Received {len(self.tuples_list)} total tuples from switch")

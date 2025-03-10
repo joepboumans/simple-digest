@@ -59,9 +59,9 @@ void SimpleDigest::run() {
         hasReceivedFirstDigest = true;
       }
 
-      std::cout << "Recieved data from digest "
-                << ControlPlane::mLearnInterface.mLearnDataVec.size()
-                << " total packets\r";
+      /*std::cout << "Recieved data from digest "*/
+      /*          << ControlPlane::mLearnInterface.mLearnDataVec.size()*/
+      /*          << " total packets\r";*/
       ControlPlane::mLearnInterface.hasNewData = false;
       lastReceivedTime = std::chrono::high_resolution_clock::now();
     }
@@ -92,7 +92,7 @@ void SimpleDigest::run() {
       break;
     }
 
-    usleep(100);
+    /*usleep(100);*/
   }
   std::cout << "Finished the test exit via ctrl-z or keep using the switch cli"
             << std::endl;

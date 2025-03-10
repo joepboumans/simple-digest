@@ -106,7 +106,7 @@ class BfRt_interface():
 
 def main():
     bfrt_interface = BfRt_interface(0, 'localhost:50052', 0)
-    bfrt_interface.list_tables()
+    # bfrt_interface.list_tables()
 
 
     bfrt_interface.run()

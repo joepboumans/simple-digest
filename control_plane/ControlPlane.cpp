@@ -48,7 +48,7 @@ ControlPlane::ControlPlane(string programName) {
   /* Always set "background" because we do not want bf_switchd_lib_init to start
    * a CLI session.  That can be done afterward by the caller if requested
    * through command line options. */
-  mSwitchContext->running_in_background = false;
+  mSwitchContext->running_in_background = true;
 
   /* Always set "skip port add" so that ports are not automatically created when
    * running on either model or HW. */

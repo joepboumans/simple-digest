@@ -15,7 +15,6 @@ extern "C" {
 }
 
 SimpleDigest::SimpleDigest() : ControlPlane("simple_digest") {
-  return;
   const auto forwardTable = ControlPlane::getTable("SwitchIngress.forward");
   /*ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 0}},*/
   /*                       {{"dst_port", 0}}, "SwitchIngress.hit");*/
@@ -23,8 +22,12 @@ SimpleDigest::SimpleDigest() : ControlPlane("simple_digest") {
                          {{"dst_port", 148}}, "SwitchIngress.hit");
   ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 148}},
                          {{"dst_port", 132}}, "SwitchIngress.hit");
+  ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 140}},
+                         {{"dst_port", 156}}, "SwitchIngress.hit");
+  ControlPlane::addEntry(forwardTable, {{"ig_intr_md.ingress_port", 156}},
+                         {{"dst_port", 140}}, "SwitchIngress.hit");
 
-  std::array<uint32_t, 4> ports = {132, 148};
+  std::array<uint32_t, 4> ports = {132, 148, 140, 156};
   for (auto &port : ports) {
     bf_pal_front_port_handle_t port_handle;
     bf_status_t bf_status =
@@ -37,6 +40,7 @@ SimpleDigest::SimpleDigest() : ControlPlane("simple_digest") {
       printf("Error: %s\n", bf_err_str(bf_status));
       throw std::runtime_error("Failed to add entry");
     }
+    std::cout << "Added port " << port << " to pm" << std::endl;
   }
 }
 

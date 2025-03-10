@@ -1,13 +1,12 @@
 #! /usr/bin/env python3
-import os, sys  
+import os, sys, time 
 
-sys.path.append('../../../sde/bf-sde-9.11.0/install/lib/python3.8/site-packages/tofino/')
-sys.path.append('../../../sde/bf-sde-9.11.0/install/lib/python3.8/site-packages/tofino/bfrt_grpc/')
+sys.path.append('/home/onie/sde/bf-sde-9.11.0/install/lib/python3.8/site-packages/tofino/')
+sys.path.append('/home/onie/sde/bf-sde-9.11.0/install/lib/python3.8/site-packages/tofino/bfrt_grpc/')
 
 os.environ["GRPC_ENABLE_FORK_SUPPORT"] = "1"
-os.environ["GRPC_POLL_STRATEGY"] = "poll"
-os.environ["GRPC_VERBOSITY"] = "debug"
-
+# os.environ["GRPC_POLL_STRATEGY"] = "poll"
+# os.environ["GRPC_VERBOSITY"] = "debug"
 
 import bfrt_grpc.client as gc
 
@@ -27,7 +26,11 @@ class BfRt_interface():
 
         self.learn_filter = self.bfrt_info.learn_get("digest")
         self.learn_filter.info.data_field_annotation_add("src_addr", "ipv4")
-        self.learn_filter.info.data_field_annotation_add("dst_addr", "ipv4")
+
+        self.total_received = 0
+        self.recievedDigest = 0
+        self.digestList = []
+        self.missedDigest = 0
 
         print("Connected to Device: {}, Program: {}, ClientId: {}".format(
                 dev, self.p4_name, client_id))
@@ -57,17 +60,26 @@ class BfRt_interface():
             print("================")
 
     def _read_digest(self):
-        try:
-            digest = self.interface.digest_get(1)
-            data_list = self.learn_filter.make_data_list(digest)
-            data_dict = data_list[0].to_dict()
-            src_addr = data_dict["src_addr"]
-            dst_addr = data_dict["dst_addr"]
-            print(f"{src_addr} {dst_addr}")
-                # print(flow_id, flush=True)
-        except:
-            print("error reading digest", end="", flush=True)
+        self.isRunning = True
+        while self.isRunning:
+            try:
+                digest = self.interface.digest_get(0.1)
+                data_list = self.learn_filter.make_data_list(digest)
+                self.total_received += len(data_list)
+                self.digestList.append(data_list)
 
+                self.recievedDigest += 1
+                if self.recievedDigest % 1000 == 0:
+                    print(f"Received {self.recievedDigest} digests")
+
+                self.hasFirstData = True
+            except Exception as err:
+                self.missedDigest += 1
+                print(f"error reading digest {self.missedDigest}, {err} ", end="", flush=True)
+                if self.hasFirstData and self.missedDigest >= 3:
+                    self.isRunning = False
+                    print("")
+                time.sleep(0.05)
 
     def run(self):
         self._read_digest()

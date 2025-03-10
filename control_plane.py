@@ -31,6 +31,7 @@ class BfRt_interface():
         self.recievedDigest = 0
         self.digestList = []
         self.missedDigest = 0
+        self.hasFirstData = False
 
         print("Connected to Device: {}, Program: {}, ClientId: {}".format(
                 dev, self.p4_name, client_id))

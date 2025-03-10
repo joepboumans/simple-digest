@@ -81,10 +81,10 @@ class BfRt_interface():
                     self.timeFirstData = perf_counter()
                 self.hasFirstData = True
             except Exception as err:
-                if(perf_counter() - self.lastRun >= 0.5):
+                if(perf_counter() - self.lastRun >= 1):
                     self.missedDigest += 1
                     print(f"error reading digest {self.missedDigest}, {err} ", end="", flush=True)
-                    if self.hasFirstData and self.missedDigest >= 3:
+                    if self.hasFirstData and self.missedDigest >= 5:
                         self.isRunning = False
                         print("")
                     self.lastRun = perf_counter()
